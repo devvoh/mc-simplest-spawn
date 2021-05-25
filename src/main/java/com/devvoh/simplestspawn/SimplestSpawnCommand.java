@@ -52,10 +52,6 @@ public class SimplestSpawnCommand implements CommandExecutor
             return false;
         }
 
-        player.teleport(new Location(player.getWorld(), x, y, z, yaw, pitch));
-
-        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2.0F, 1.0F);
-
         String playerUUID = player.getUniqueId().toString();
         Long currentTimestamp = System.currentTimeMillis() / 1000L;
         Long playerLastUsed = this.spawnLastUsed.get(playerUUID);
@@ -66,6 +62,10 @@ public class SimplestSpawnCommand implements CommandExecutor
             );
             return false;
         }
+
+        player.teleport(new Location(player.getWorld(), x, y, z, yaw, pitch));
+
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2.0F, 1.0F);
 
         spawnLastUsed.put(playerUUID, currentTimestamp);
 
