@@ -1,0 +1,11 @@
+name: SimplestSpawn
+description: The simplest spawn command possible
+version: 0.1.0
+author: Robin de Graaf
+main: com.devvoh.simplestspawn.SimplestSpawnPlugin
+api-version: 1.16
+commands:
+  spawn:
+    description: Go to spawn
+  setspawn:
+    description: Set spawn
