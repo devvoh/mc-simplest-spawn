@@ -1,1 +1,1 @@
-# semi-vanilla-tweaks
+# SimplestSpawn MC plugin for Spigot/Paper
