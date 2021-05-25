@@ -73,6 +73,10 @@ public class SimplestSpawnCommand implements CommandExecutor
     }
 
     private Boolean setSpawn(Player player) {
+        if (!player.isOp()) {
+            return false;
+        }
+
         Double x = player.getLocation().getX();
         Double y = player.getLocation().getY() + 0.25; // bump it a little
         Double z = player.getLocation().getZ();
