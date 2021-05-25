@@ -7,8 +7,18 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public record SimplestSpawnCommand(SimplestSpawnPlugin plugin) implements CommandExecutor
+import java.util.HashMap;
+
+public class SimplestSpawnCommand implements CommandExecutor
 {
+    final private SimplestSpawnPlugin plugin;
+    final int cooldown = 5;
+    HashMap<String, Long> spawnLastUsed = new HashMap<>();
+
+    public SimplestSpawnCommand(SimplestSpawnPlugin plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!com.devvoh.simplestspawn.SimplestSpawnTools.isPlayer(sender)) {
@@ -37,15 +47,27 @@ public record SimplestSpawnCommand(SimplestSpawnPlugin plugin) implements Comman
 
         if (x == 0 && y == 0 && z == 0) {
             player.sendMessage(
-                    "§5[SimplestSpawn]§c[ERROR] §eNo spawn set! First run /setspawn to set your current location as spawn."
+                "§5[SimplestSpawn]§c[ERROR] §eNo spawn set! First run /setspawn to set your current location as spawn."
             );
-
             return false;
         }
 
         player.teleport(new Location(player.getWorld(), x, y, z, yaw, pitch));
 
         player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 2.0F, 1.0F);
+
+        String playerUUID = player.getUniqueId().toString();
+        Long currentTimestamp = System.currentTimeMillis() / 1000L;
+        Long playerLastUsed = this.spawnLastUsed.get(playerUUID);
+
+        if (playerLastUsed != null && (currentTimestamp - playerLastUsed) < this.cooldown) {
+            player.sendMessage(
+                "§5[SimplestSpawn]§d[NOPE] §ePlease wait at least " + this.cooldown + " seconds before using /spawn again."
+            );
+            return false;
+        }
+
+        spawnLastUsed.put(playerUUID, currentTimestamp);
 
         return true;
     }
